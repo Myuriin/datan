@@ -1,0 +1,4 @@
+"SMILES","construction","architecture","complement"
+"Cc1ccsc1-c1cc(C)c(-c2ccc(-c3cc(C)c(C4=S=C(c5ccc6c7cc8c(cc7n(C)c6c5)c5ccccc5n8C)C(C)=C4)s3)c3nsnc32)s1 ","polymer ","bulk ","PC61BM "
+"COCc1cc2csc(-c3cc4c(s3)c(OC)c3ccsc3c4OC)c2s1 ","polymer ","bulk ","PC71BM "
+"COc1ccc(N(c2ccc(C=Cc3cc4c(s3)-c3sc(C=C(C#N)C(=O)O)cc3C4(C)C)cc2)c2ccc(OC)cc2)cc1 ","molecule","DSSC","TiO2"
