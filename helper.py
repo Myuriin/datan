@@ -55,9 +55,6 @@ def plot_histograms(df, columns, bins=30, figsize=(12, 5), layout='horizontal', 
     plt.show()
 
 
-# Create histogram
-plot_histograms(df, ['optical_gap_exp', 'optical_gap_comp'], titles=['Experimental Optical Gap', 'Computed Optical Gap'])
-
 # Create a function to get molecule descriptors
 from rdkit.Chem import AddHs
 
@@ -116,8 +113,6 @@ def check_unique_value(df):
   print()
   print(f"Total number of columns with only one unique value: {one_value_cols_sum}")
 
-check_unique_value(df_with_descriptors)
-
 # create function to drop the columns that have only one unique value
 def drop_unique_value(df):
   one_value_cols_sum = 0
@@ -132,8 +127,6 @@ def drop_unique_value(df):
   print(f"Total number of columns with only one unique value (dropped columns): {one_value_cols_sum}")
 
   return df
-
-df_with_descriptors = drop_unique_value(df_with_descriptors)
 
 # Create a ready up function where it will drop all obj type columns as this data type does not work with regression
 def ready_up(df):
@@ -173,56 +166,6 @@ def save_model(model, X_train, filename):
         pickle.dump(model, f)
     
     print(f"✅ Model saved to {filename} with {len(model.feature_names)} features.")
-
-# Create a function to automize target -> target with features ready
-# Step 1: Until getting descriptors
-def target_ready_step1(target_df):
-    # Data Cleaning
-    target_df = clean(target_df)
-    
-    # One-Hot Encoding
-    # it is necessary to encode the categorical features such as 'construction', 'architechture' and 'complement' --> using One-hot encoding
-    target_df = pd.get_dummies(target_df, columns=['construction', 'architecture', 'complement'])
-    # change only the boolean type data to integer
-    target_df = target_df.apply(lambda x: x.astype(int) if x.dtype == 'bool' else x)
-    
-    # Get Descriptors
-    target_df = get_descriptors(target_df)
-    
-    # Ready Up
-    target_df = ready_up(target_df)
-    
-    return target_df
-
-# Step 2: Match features to model training set
-def target_ready_step2(target_df, model_df):
-    """
-    Ensure that target_df has the same feature columns as model_df.
-    Works for:
-    - Only PCE_exp present
-    - Only optical_gap_exp present
-    - Both present
-    - Neither present (already features only)
-    """
-    # Identify possible target columns
-    possible_targets = ["PCE_exp", "optical_gap_exp"]
-    present_targets = [col for col in possible_targets if col in model_df.columns]
-    
-    # Drop target columns if present
-    if present_targets:
-        model_features = model_df.drop(columns=present_targets).columns
-    else:
-        model_features = model_df.columns
-    
-    # Add missing columns to target_df
-    for col in model_features:
-        if col not in target_df.columns:
-            target_df[col] = 0
-    
-    # Keep only model features
-    target_df = target_df[model_features]
-    
-    return target_df
 
 # Create a function to automize target -> target with features ready
 # Step 1: Until getting descriptors
